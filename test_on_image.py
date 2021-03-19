@@ -8,6 +8,7 @@ import tqdm
 from torchvision.utils import save_image
 from PIL import Image
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_path", type=str, required=True, help="Path to image")
@@ -23,7 +24,8 @@ if __name__ == "__main__":
 
     # Define model and load model checkpoint
     transformer = TransformerNet().to(device)
-    transformer.load_state_dict(torch.load(args.checkpoint_model))
+    transformer.load_state_dict(torch.load(args.checkpoint_model, map_location='cpu'))
+    # transformer.load_state_dict(torch.load(args.checkpoint_model))
     transformer.eval()
 
     # Prepare input
@@ -36,4 +38,5 @@ if __name__ == "__main__":
 
     # Save image
     fn = args.image_path.split("/")[-1]
-    save_image(stylized_image, f"images/outputs/stylized-{fn}")
+    fn1 = args.checkpoint_model.split("/")[-1].split("_")[0]
+    save_image(stylized_image, f"./images/outputs/stylized-{fn1}-{fn}")
